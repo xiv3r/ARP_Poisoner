@@ -89,6 +89,12 @@ void ARP_poisoner::fill_arp_hdr(uint8_t *src_mac, uint8_t *src_ip,
     memcpy(&arp_pkt.target_mac, dest_mac, MAC_ADDRESS_LENGTH * sizeof(uint8_t));
 }
 
+#ifdef ARDUINO_NANO_ESP32
+#define SERIAL_DEVICE Serial
+#else
+#define SERIAL_DEVICE Serial0
+#endif
+
 void ARP_poisoner::send_arp_packet(uint8_t dest_ip[IPV4_LENGTH],
                                    uint8_t dest_mac[MAC_ADDRESS_LENGTH]) {
     // Fill ARP hdr
@@ -100,8 +106,8 @@ void ARP_poisoner::send_arp_packet(uint8_t dest_ip[IPV4_LENGTH],
     // Send ARP packet
     if (esp_wifi_internal_tx(WIFI_IF_STA, ether_frame, PACKET_LENGTH) !=
         ESP_OK) {
-        Serial0.println("Packet not sent");
+        SERIAL_DEVICE.println("Packet not sent");
     } else {
-        Serial0.println("Packet sent");
+        SERIAL_DEVICE.println("Packet sent");
     }
 }
