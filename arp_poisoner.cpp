@@ -89,10 +89,10 @@ void ARP_poisoner::fill_arp_hdr(uint8_t *src_mac, uint8_t *src_ip,
     memcpy(&arp_pkt.target_mac, dest_mac, MAC_ADDRESS_LENGTH * sizeof(uint8_t));
 }
 
-#ifdef ARDUINO_NANO_ESP32
-#define SERIAL_DEVICE Serial
-#else
+#ifdef ESP32S3_DEVKITC_BOARD
 #define SERIAL_DEVICE Serial0
+#else
+#define SERIAL_DEVICE Serial
 #endif
 
 void ARP_poisoner::send_arp_packet(uint8_t dest_ip[IPV4_LENGTH],
